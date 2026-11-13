@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="logo.svg" width="96" height="96" alt="autopost-kit logo">
+</p>
+
 # autopost-kit
 
 **排程發文佇列。** 管「什麼時候發、發了沒、失敗怎麼辦」，不管「怎麼發」。零依賴、框架無關，儲存和實際發文都由你注入。
