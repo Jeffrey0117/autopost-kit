@@ -3,10 +3,24 @@
   "version": "0.1.0",
   "description": "Scheduled publishing queue: time slots, relative delays, no double-send, manual requeue, pause and auto-pause on repeated failure. Storage and the publish function are injected.",
   "main": "index.js",
-  "scripts": {
-    "example": "node example.js"
+  "files": [
+    "index.js",
+    "SKILL.md",
+    "kit-checks.json"
+  ],
+  "engines": {
+    "node": ">=18"
   },
-  "keywords": [],
+  "scripts": {
+    "example": "node example.js",
+    "test": "node --test \"test/*.test.js\""
+  },
+  "keywords": [
+    "scheduler",
+    "publishing",
+    "queue",
+    "autopost"
+  ],
   "author": "Jeffrey0117",
   "license": "MIT"
 }

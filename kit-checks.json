@@ -1,0 +1,21 @@
+{
+  "_schema": "kit-kit audit.js 的格式：{ id, rule, fix, pattern, files, severity }。pattern 與 files 都是 JS RegExp 字串（無 flags），pattern 逐行比對，files 比對專案內的相對路徑。audit 本身已排除 *.md / test/ / docs/ / example.js / kit-checks.json。",
+  "checks": [
+    {
+      "id": "manual-publishing-status",
+      "severity": "high",
+      "pattern": "^(?!\\s*(?:\\*|//|/\\*|#)).*status\\s*[:=]\\s*['\"](?:publishing|published)['\"]",
+      "files": "^(?!.*(?:(?:^|/)(?:test|tests|e2e|scripts|__tests__|__mocks__|fixtures)/))(?!.*(?:__tests__|__mocks__|\\.test\\.|\\.spec\\.|node_modules|\\.next/|dist/|build/|coverage/)).*\\.(js|cjs|mjs|ts)$",
+      "rule": "用了 autopost-kit 的專案不該自己把 status 寫成 publishing / published。佔位防重發、連續失敗計數、自動暫停都靠 kit 經手；自己改狀態會繞過它們，可能重複發文或讓自動暫停失效。",
+      "fix": "改呼叫 queue.publishNow(id)（立刻發）或 queue.schedule(id, when)（排程）。如果這一行只是前端在比對或顯示狀態（讀，不是寫），忽略本條。"
+    },
+    {
+      "id": "hand-rolled-due-loop",
+      "severity": "medium",
+      "pattern": "^(?!\\s*(?:\\*|//|/\\*|#)).*status\\s*===?\\s*['\"]scheduled['\"].*scheduledAt\\s*<=",
+      "files": "^(?!.*(?:(?:^|/)(?:test|tests|e2e|scripts|__tests__|__mocks__|fixtures)/))(?!.*(?:__tests__|__mocks__|\\.test\\.|\\.spec\\.|node_modules|\\.next/|dist/|build/|coverage/)).*\\.(js|cjs|mjs|ts)$",
+      "rule": "自己在撈「到期的排程項目」——這是 kit 的 tick() 在做的事。手寫的版本通常沒有暫停檢查、沒有 maxLateMinutes、沒有防重入。",
+      "fix": "刪掉手寫的迴圈，改用 queue.start()，或在自己的 cron 裡呼叫 queue.tick()。"
+    }
+  ]
+}
